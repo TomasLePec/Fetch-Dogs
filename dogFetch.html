@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Fetch | Dog pictures</title>
+        <style>
+            :root {
+                --black: #1b1b15;
+                --green: #58af58;
+                --yellow: #f7df1e;
+            }
+
+            form {
+                margin-top: 25vh;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                flex-flow: row nowrap;
+                font-size: 1.5em;
+            }
+
+            input,
+            button {
+                font-size: 1em;
+                cursor: pointer;
+                padding: 0.5em 1em;
+                height: 100%;
+                border: 0.25em solid var(--black);
+            }
+
+            .numero{
+                width: 100px;
+            }
+
+            input {
+                cursor: initial;
+                border-color: var(--black);
+            }
+
+            .gallery {
+                display: flex;
+                flex-flow: row wrap;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+
+            img {
+                margin: 2em 1em;
+                max-width: 33%;
+                max-height: 500px;
+                box-shadow: 0 0 5px var(--black);
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+            <input class="numero" type="number" name="cantidad" required min="1" max="100">
+            <input class="raza" type="text" placeholder="Breed" required name="breed" />
+            <button type="submit">Fetch pictures</button>
+        </form>
+        <div class="gallery"></div>
+        <script>
+            const formulario = document.getElementsByTagName('form')[0]
+            
+            function mostrarFotos(){
+                
+                const cantidad = document.getElementsByClassName('numero')[0].value
+                const raza = document.getElementsByClassName('raza')[0].value.toLowerCase()
+                const galeria = document.getElementsByClassName("gallery")[0]
+                const fotos = document.getElementsByClassName('foto')
+                if(fotos.length > 0){
+                    for(j = 0;j<fotos.length;j){
+                        const child = fotos[j];
+                        galeria.removeChild(child);
+                    }
+                }
+                    for(var i = 0;i<cantidad;i++){
+                        fetch(`https://dog.ceo/api/breed/${raza}/images/random`)
+                            .then(resp => resp.json())
+                            .then(data => {console.log(data.message)
+                                const imagen = document.createElement('img')
+                                imagen.setAttribute('class','foto')
+                                console.log(imagen.className)
+                                galeria.appendChild(imagen)
+                                imagen.src = data.message;
+                            })
+                    
+                    }
+                   
+            }
+            
+            formulario.addEventListener('submit',function(even){
+                even.preventDefault();
+                mostrarFotos();
+            })
+
+
+            
+            
+            
+            
+            
+        </script>
+    </body>
+</html>
